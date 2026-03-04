@@ -1,95 +1,139 @@
-# 🌀 Claude Logo — Sejarah & Filosofi
+# 🕌 Waktu Sholat
 
-> Sebuah web interaktif yang mengeksplorasi sejarah, anatomi desain, dan filosofi di balik logo Claude dari Anthropic.
-
-**🔗 Live Demo:** https://portal-immortal.github.io/
+Aplikasi jadwal sholat berbasis web — single file HTML, tanpa instalasi, tanpa backend. Buka langsung di browser.
 
 ---
 
-## ✨ Fitur
+## Fitur
 
-- **Hero animasi** — logo starburst interaktif yang bisa diklik, dengan tooltip makna tiap petal
-- **Timeline sejarah** — perjalanan Anthropic dari stealth mode 2021 hingga sekarang
-- **Asal nama "Claude"** — penghormatan kepada Claude Shannon, Bapak Teori Informasi
-- **Anatomi logo interaktif** — klik tiap elemen untuk menyoroti bagian logo terkait
-- **Sistem warna** — palet terra cotta lengkap, klik kartu untuk copy HEX code
-- **6 kartu filosofi** — makna mendalam di balik setiap pilihan desain
-- **Navigasi sticky** dengan highlight section aktif
-
----
-
-## 🛠️ Teknologi
-
-- Pure **HTML5 / CSS3 / Vanilla JavaScript** — tanpa framework, tanpa dependencies
-- Font: [Playfair Display](https://fonts.google.com/specimen/Playfair+Display), [DM Mono](https://fonts.google.com/specimen/DM+Mono), [Syne](https://fonts.google.com/specimen/Syne) via Google Fonts
-- Animasi: CSS keyframes + Intersection Observer API
-- Single file, zero build step
+- **Deteksi lokasi otomatis** via GPS browser
+- **Jadwal 5 waktu sholat** — Subuh, Dzuhur, Ashar, Maghrib, Isya
+- **Imsak** — muncul otomatis hanya di bulan Ramadan
+- **Countdown real-time** ke waktu sholat berikutnya
+- **Progress bar** antar dua waktu sholat
+- **Tanggal Hijriyah** ditampilkan di bawah tanggal Masehi
+- **Dukungan luar negeri** — otomatis beralih ke API internasional jika lokasi di luar Indonesia
+- **Notifikasi browser** — pengingat 5 menit sebelum & tepat saat waktu masuk
+- **Dark / Light mode** — toggle di topbar
+- **Numeral Arab / Latin** — toggle di topbar
+- **Responsif** — optimal di mobile maupun desktop
 
 ---
 
-## 🚀 Deploy ke GitHub Pages
+## Cara Pakai
 
-### Langkah 1 — Buat Repository
+1. Buka file `jadwal-solat.html` di browser (Chrome, Firefox, Safari, Edge)
+2. Izinkan akses lokasi saat diminta
+3. Jadwal sholat akan otomatis dimuat sesuai kota terdeteksi
 
-```bash
-git init
-git remote add origin https://github.com/username/nama-repo.git
-```
-
-### Langkah 2 — Rename file
-
-Rename `claude-logo-story.html` menjadi `index.html` supaya GitHub Pages langsung serve sebagai halaman utama.
-
-```bash
-mv claude-logo-story.html index.html
-```
-
-### Langkah 3 — Push ke GitHub
-
-```bash
-git add .
-git commit -m "🌀 Initial commit: Claude logo interactive page"
-git push -u origin main
-```
-
-### Langkah 4 — Aktifkan GitHub Pages
-
-1. Buka repository di GitHub
-2. Pergi ke **Settings → Pages**
-3. Di bagian **Source**, pilih branch `main` dan folder `/ (root)`
-4. Klik **Save**
-5. Tunggu ~1-2 menit, lalu akses di `https://username.github.io/nama-repo`
+> Tidak perlu koneksi khusus, tidak perlu server. Cukup file HTML dan koneksi internet untuk memanggil API.
 
 ---
 
-## 📁 Struktur File
+## Arsitektur
 
 ```
-.
-├── index.html      # Semua konten, style, dan script dalam satu file
-└── README.md       # Dokumentasi ini
+jadwal-solat.html
+│
+├── CSS (inline)          — styling & tema, dark/light via CSS variables
+├── HTML                  — struktur statis: topbar, jam, tanggal, container app
+└── JavaScript (inline)
+    ├── CONFIG            — daftar 5 waktu sholat + konstanta
+    ├── STATE             — pData, isRamadan, imsakData, mode numeral/tema
+    ├── CLOCK             — jam digital & tanggal Masehi, update tiap detik
+    ├── THEME / NUMERAL   — toggle dark-light & angka Arab-Latin
+    ├── GPS & GEOCODING   — navigator.geolocation → Nominatim reverse geocode
+    ├── SEARCH CITY       — kandidat nama kota, escalate dari desa → kabupaten → provinsi
+    ├── API (Indonesia)   — api.myquran.com — jadwal sholat + kalender Hijriyah
+    ├── API (Luar Negeri) — api.aladhan.com — jadwal sholat + deteksi Ramadan
+    ├── RENDER            — generate HTML kartu next prayer + list + imsak
+    ├── COUNTDOWN         — interval 1 detik, hitung mundur & progress bar
+    └── NOTIFIKASI        — Notification API, jadwalkan alert 5 menit sebelum & tepat waktu
 ```
 
 ---
 
-## 📖 Konten
+## API yang Digunakan
 
-Web ini membahas lima aspek utama logo Claude:
+| API | Kegunaan | Dokumentasi |
+|-----|----------|-------------|
+| [Nominatim (OpenStreetMap)](https://nominatim.org/release-docs/latest/api/Reverse/) | Reverse geocode koordinat GPS → nama wilayah | nominatim.org |
+| [MyQuran API v3](https://api.myquran.com) | Jadwal sholat & kalender Hijriyah (Indonesia) | api.myquran.com |
+| [Aladhan API](https://aladhan.com/prayer-times-api) | Jadwal sholat berdasarkan koordinat (luar Indonesia) | aladhan.com |
 
-| Section | Topik |
-|---|---|
-| 🕰️ Sejarah | Perjalanan brand Anthropic dari 2021 — by Geist Studio |
-| 🔤 Nama | Asal nama "Claude" dari Claude Shannon & Teori Informasi |
-| 🎯 Anatomi | Starburst, terra cotta, titik pusat, simetri radial |
-| 🎨 Warna | Sistem palet: terra cotta, warm cream, warm ink |
-| 💡 Filosofi | Transparansi, human-centric, safety first, konsistensi |
+Semua API gratis dan tidak memerlukan API key.
 
 ---
 
-## 📄 Lisensi
+## Logika Deteksi Lokasi
 
-MIT License — bebas digunakan, dimodifikasi, dan didistribusikan.
+```
+GPS (navigator.geolocation)
+  │
+  └─► Nominatim reverse geocode
+        │
+        ├─ country_code === 'id' ?
+        │     YES → kumpulkan address levels (village → suburb → city → county → state)
+        │           → cari kota di MyQuran API (escalate jika tidak ditemukan)
+        │           → fetchToday(id) → fetchHijri() → render
+        │
+        └─ NO (luar negeri)
+              → fetchAladhan(lat, lng) → deteksi Ramadan dari hijri date → render
+```
+
+**Kenapa ada escalation?**
+Nominatim terkadang mengembalikan nama wilayah yang sangat spesifik (contoh: "Bojong Gede") yang tidak ada di database MyQuran. Sistem akan otomatis mencoba level yang lebih umum (Bogor, Jawa Barat) sampai ditemukan.
 
 ---
 
-*Dibuat dengan ❤️ · Konten berdasarkan riset brand Anthropic & Geist Studio*
+## Fitur Ramadan (Imsak)
+
+- Deteksi Ramadan dilakukan otomatis dari response API Hijriyah (bulan ke-9)
+- Row **Imsak** muncul di atas Subuh dengan styling khusus (border dashed, warna hijau)
+- Di luar bulan Ramadan, baris Imsak tidak ditampilkan sama sekali
+- Notifikasi Imsak (5 menit sebelum & tepat waktu) juga dijadwalkan otomatis saat Ramadan
+
+---
+
+## Notifikasi
+
+Notifikasi menggunakan **Web Notifications API** bawaan browser.
+
+| Waktu | Notifikasi |
+|-------|-----------|
+| 5 menit sebelum sholat | "🕌 [Nama] dalam 5 menit" |
+| Tepat waktu sholat | "🕌 Waktu [Nama]" |
+| 5 menit sebelum Imsak (Ramadan) | "🌙 Imsak dalam 5 menit" |
+| Tepat Imsak (Ramadan) | "🌙 Waktu Imsak" |
+
+> Notifikasi hanya berjalan selama tab browser terbuka. Tidak ada background service / service worker.
+
+---
+
+## Kompatibilitas Browser
+
+| Browser | Status |
+|---------|--------|
+| Chrome 80+ | ✅ |
+| Firefox 75+ | ✅ |
+| Safari 14+ | ✅ |
+| Edge 80+ | ✅ |
+| Samsung Internet | ✅ |
+
+> Fitur notifikasi tidak tersedia di Safari iOS (keterbatasan sistem operasi).
+
+---
+
+## Catatan Pengembangan
+
+- Seluruh aplikasi adalah **single file HTML** — tidak ada dependency eksternal selain Google Fonts
+- Tidak menggunakan framework JavaScript apapun
+- Semua state disimpan di memori, tidak ada localStorage / cookie
+- Timezone diasumsikan mengikuti perangkat pengguna; jadwal dari MyQuran menggunakan `tz=Asia/Jakarta`
+- Untuk lokasi luar Indonesia, waktu ditampilkan sesuai timezone lokal perangkat
+
+---
+
+## Lisensi
+
+Bebas digunakan dan dimodifikasi untuk keperluan pribadi maupun komersial.

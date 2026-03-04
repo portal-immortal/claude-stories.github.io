@@ -1,862 +1,586 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark" data-numeral="latin">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Logo Claude — Sejarah & Filosofi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Waktu Sholat</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --terra: #da7756;
-    --terra-light: #f0b89a;
-    --terra-dark: #b85a38;
-    --cream: #faf6f1;
-    --ink: #1a1208;
-    --warm-gray: #8b7355;
-    --card-bg: #fff9f4;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--cream);
-    color: var(--ink);
-    overflow-x: hidden;
-  }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    padding: 2rem;
-    background: var(--ink);
-    overflow: hidden;
-  }
-
-  .hero-bg-ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(218,119,86,0.15);
-    animation: pulse-ring 4s ease-in-out infinite;
-  }
-  .hero-bg-ring:nth-child(1) { width: 300px; height: 300px; animation-delay: 0s; }
-  .hero-bg-ring:nth-child(2) { width: 500px; height: 500px; animation-delay: 0.5s; }
-  .hero-bg-ring:nth-child(3) { width: 700px; height: 700px; animation-delay: 1s; }
-  .hero-bg-ring:nth-child(4) { width: 900px; height: 900px; animation-delay: 1.5s; }
-
-  @keyframes pulse-ring {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.02); }
-  }
-
-  /* CLAUDE LOGO SVG recreation */
-  .logo-container {
-    position: relative;
-    z-index: 2;
-    margin-bottom: 3rem;
-    cursor: pointer;
-  }
-
-  .logo-svg {
-    width: 120px;
-    height: 120px;
-    animation: logo-float 3s ease-in-out infinite;
-  }
-
-  @keyframes logo-float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(3deg); }
-  }
-
-  .logo-container:hover .logo-svg {
-    animation: logo-spin 1s ease forwards;
-  }
-
-  @keyframes logo-spin {
-    to { transform: rotate(360deg) scale(1.1); }
-  }
-
-  .hero-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
-    color: var(--terra);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    z-index: 2;
-    position: relative;
-    opacity: 0;
-    animation: fade-up 0.8s ease 0.3s forwards;
-  }
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 8vw, 5.5rem);
-    font-weight: 700;
-    color: var(--cream);
-    text-align: center;
-    line-height: 1.1;
-    z-index: 2;
-    position: relative;
-    opacity: 0;
-    animation: fade-up 0.8s ease 0.5s forwards;
-  }
-
-  .hero-title em {
-    color: var(--terra);
-    font-style: italic;
-  }
-
-  .hero-sub {
-    font-size: 0.8rem;
-    color: var(--warm-gray);
-    text-align: center;
-    margin-top: 1.5rem;
-    z-index: 2;
-    position: relative;
-    letter-spacing: 0.05em;
-    opacity: 0;
-    animation: fade-up 0.8s ease 0.7s forwards;
-  }
-
-  .scroll-cta {
-    position: absolute;
-    bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    z-index: 2;
-    opacity: 0;
-    animation: fade-up 0.8s ease 1.2s forwards;
-  }
-
-  .scroll-cta span { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--warm-gray); text-transform: uppercase; }
-  .scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, var(--terra), transparent);
-    animation: scroll-line 1.5s ease-in-out infinite;
-  }
-
-  @keyframes scroll-line {
-    0% { transform: scaleY(0); transform-origin: top; }
-    50% { transform: scaleY(1); transform-origin: top; }
-    51% { transform: scaleY(1); transform-origin: bottom; }
-    100% { transform: scaleY(0); transform-origin: bottom; }
-  }
-
-  @keyframes fade-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* NAV */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(250,246,241,0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(218,119,86,0.2);
-    padding: 1rem 2rem;
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  nav a {
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--warm-gray);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  nav a:hover, nav a.active { color: var(--terra); }
-
-  /* SECTIONS */
-  section {
-    padding: 5rem 2rem;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--terra);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    max-width: 60px;
-    height: 1px;
-    background: var(--terra);
-    opacity: 0.4;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 2rem;
-  }
-
-  .body-text {
-    font-size: 0.85rem;
-    line-height: 1.9;
-    color: #3d2e1e;
-    margin-bottom: 1.5rem;
-  }
-
-  /* TIMELINE */
-  .timeline {
-    position: relative;
-    padding-left: 2rem;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--terra), transparent);
-  }
-
-  .timeline-item {
-    position: relative;
-    margin-bottom: 3rem;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  .timeline-item.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  .timeline-dot {
-    position: absolute;
-    left: -2.4rem;
-    top: 0.4rem;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--terra);
-    border: 2px solid var(--cream);
-    box-shadow: 0 0 0 3px rgba(218,119,86,0.2);
-  }
-
-  .timeline-year {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--terra);
-    letter-spacing: 0.2em;
-    margin-bottom: 0.4rem;
-  }
-
-  .timeline-item h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-
-  /* PHILOSOPHY CARDS */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-
-  .phil-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(218,119,86,0.15);
-    border-radius: 12px;
-    padding: 1.75rem;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  .phil-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .phil-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(218,119,86,0.12);
-    border-color: var(--terra);
-  }
-
-  .card-icon {
-    width: 40px;
-    height: 40px;
-    background: rgba(218,119,86,0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-
-  .phil-card h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    margin-bottom: 0.6rem;
-    color: var(--terra-dark);
-  }
-
-  .phil-card p {
-    font-size: 0.78rem;
-    line-height: 1.7;
-    color: #5a4a38;
-  }
-
-  /* ANATOMY SECTION */
-  .anatomy-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: center;
-  }
-
-  @media (max-width: 600px) {
-    .anatomy-wrapper { grid-template-columns: 1fr; }
-  }
-
-  .anatomy-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .anatomy-svg {
-    width: 200px;
-    height: 200px;
-  }
-
-  .anatomy-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .anatomy-item {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    cursor: pointer;
-    padding: 0.75rem;
-    border-radius: 8px;
-    transition: background 0.2s;
-  }
-
-  .anatomy-item:hover { background: rgba(218,119,86,0.07); }
-
-  .anatomy-item.active { background: rgba(218,119,86,0.12); }
-
-  .anatomy-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--terra);
-    min-width: 24px;
-    padding-top: 2px;
-  }
-
-  .anatomy-item-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-
-  .anatomy-item-desc {
-    font-size: 0.75rem;
-    line-height: 1.6;
-    color: #5a4a38;
-  }
-
-  /* COLOR SECTION */
-  .color-showcase {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .color-chip {
-    flex: 1;
-    min-width: 120px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  .color-chip:hover { transform: scale(1.03); }
-
-  .color-swatch {
-    height: 100px;
-  }
-
-  .color-info {
-    padding: 0.75rem;
-    background: white;
-  }
-
-  .color-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-  }
-
-  .color-hex {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--warm-gray);
-  }
-
-  /* QUOTE */
-  .big-quote {
-    border-left: 3px solid var(--terra);
-    padding: 1.5rem 2rem;
-    margin: 2rem 0;
-    background: rgba(218,119,86,0.04);
-    border-radius: 0 12px 12px 0;
-  }
-
-  .big-quote p {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-style: italic;
-    line-height: 1.7;
-    color: var(--ink);
-    margin-bottom: 0.5rem;
-  }
-
-  .big-quote cite {
-    font-size: 0.7rem;
-    color: var(--warm-gray);
-    letter-spacing: 0.1em;
-    font-style: normal;
-  }
-
-  /* DIVIDER */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--terra), transparent);
-    opacity: 0.2;
-    margin: 1rem 0;
-  }
-
-  /* FOOTER */
-  footer {
-    background: var(--ink);
-    color: var(--warm-gray);
-    text-align: center;
-    padding: 3rem 2rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-  }
-
-  footer span { color: var(--terra); }
-
-  /* Tooltip */
-  .tooltip {
-    position: fixed;
-    background: var(--ink);
-    color: var(--cream);
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.7rem;
-    pointer-events: none;
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.2s;
-    max-width: 200px;
-    text-align: center;
-  }
-
-  /* Highlight petal on hover */
-  .petal { transition: opacity 0.3s, fill 0.3s; }
-  .petal:hover { opacity: 0.8; fill: #f0b89a !important; }
-
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--t:0.4s cubic-bezier(0.4,0,0.2,1)}
+[data-theme="dark"]{
+  --bg:#0D0D0F;--surface:#141416;--surface2:#1C1C20;
+  --border:rgba(255,255,255,0.07);--text:#F0EDE8;--muted:rgba(240,237,232,0.38);
+  --accent:#C8A97E;--accent2:#7FAF95;--glow:rgba(200,169,126,0.12);
+  --shadow:0 8px 48px rgba(0,0,0,0.65);
+}
+[data-theme="light"]{
+  --bg:#F6F3EE;--surface:#FFFFFF;--surface2:#EDE9E1;
+  --border:rgba(0,0,0,0.08);--text:#1A1814;--muted:rgba(26,24,20,0.42);
+  --accent:#8B6434;--accent2:#3E7A60;--glow:rgba(139,100,52,0.1);
+  --shadow:0 8px 40px rgba(0,0,0,0.1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;transition:background var(--t),color var(--t);overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 90% 50% at 50% -5%,var(--glow),transparent 65%);
+}
+.wrap{position:relative;z-index:1;max-width:468px;margin:0 auto;padding:22px 18px 64px}
+
+/* TOPBAR */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;animation:fadeD .5s ease both}
+.app-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:var(--accent)}
+.controls{display:flex;gap:7px}
+.ctrl-btn{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;
+  font-size:0.72rem;font-weight:500;letter-spacing:0.3px;
+  padding:6px 11px;transition:all .2s;display:flex;align-items:center;gap:5px;
+}
+.ctrl-btn:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
+.ctrl-btn svg{width:13px;height:13px;flex-shrink:0}
+
+/* LOCATION */
+.loc-bar{
+  text-align:center;font-size:0.73rem;color:var(--muted);letter-spacing:.5px;
+  margin-bottom:24px;min-height:16px;animation:fadeD .5s .06s ease both;
+}
+.loc-bar span{color:var(--accent)}
+
+/* CLOCK */
+.hijri{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.82rem;color:var(--accent2);text-align:center;
+  margin-top:4px;margin-bottom:0;letter-spacing:.3px;
+}
+.clock-wrap{text-align:center;margin-bottom:26px;animation:fadeD .5s .1s ease both}
+.live-clock{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.8rem,17vw,5.8rem);
+  font-weight:300;line-height:1;letter-spacing:-2px;color:var(--text);
+}
+.live-clock .colon{animation:blink 1s step-end infinite;color:var(--accent)}
+@keyframes blink{50%{opacity:.15}}
+.clock-date{font-size:.72rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:5px}
+
+/* NEXT CARD */
+.next-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:22px 26px;margin-bottom:14px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow);animation:fadeU .5s .14s ease both;
+  transition:background var(--t),border-color var(--t);
+}
+.next-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.next-lbl{font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.next-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px}
+.next-name{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:400;color:var(--text);line-height:1}
+.next-ar{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:var(--accent);margin-top:3px}
+.next-time{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;color:var(--accent);letter-spacing:-.5px}
+
+/* COUNTDOWN */
+.cd-wrap{display:flex;align-items:baseline;gap:3px}
+.cd-blk{text-align:center;min-width:50px}
+.cd-num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;line-height:1;display:block;color:var(--text)}
+.cd-unit{font-size:.58rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-top:1px}
+.cd-sep{font-family:'Cormorant Garamond',serif;font-size:2.1rem;color:var(--accent);opacity:.45;align-self:flex-start;padding-top:2px}
+
+/* PROGRESS */
+.prog-wrap{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.prog-lbl{display:flex;justify-content:space-between;font-size:.62rem;color:var(--muted);letter-spacing:.4px;margin-bottom:5px}
+.prog-track{height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width 1s linear}
+
+/* PRAYER LIST */
+.prayer-list{display:flex;flex-direction:column;gap:7px;animation:fadeU .5s .18s ease both}
+.p-row{
+  display:flex;align-items:center;padding:13px 18px;
+  background:var(--surface);border:1px solid var(--border);border-radius:13px;
+  transition:all .22s;position:relative;overflow:hidden;
+}
+.p-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);opacity:0;transition:opacity .3s}
+.p-row.is-next{border-color:rgba(200,169,126,.28);background:var(--surface2)}
+.p-row.is-next::before{opacity:1}
+.p-row.is-past{opacity:.38}
+.p-idx{font-family:'Cormorant Garamond',serif;font-size:.72rem;color:var(--muted);width:16px;margin-right:13px;flex-shrink:0}
+.p-info{flex:1}
+.p-en{font-size:.88rem;font-weight:500;color:var(--text);display:block}
+.p-ar{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.76rem;color:var(--muted);display:block;margin-top:1px}
+.p-time{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:400;color:var(--text);letter-spacing:-.2px}
+.p-row.is-next .p-time{color:var(--accent)}
+.p-dot{width:5px;height:5px;border-radius:50%;background:var(--border);margin-left:10px;flex-shrink:0;transition:background .3s}
+.p-row.is-next .p-dot{background:var(--accent)}
+
+/* NOTIF */
+.notif-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface);border:1px solid var(--border);border-radius:13px;
+  padding:13px 18px;margin-top:14px;animation:fadeU .5s .22s ease both;
+  transition:background var(--t);
+}
+.n-t1{font-size:.84rem;color:var(--text)}
+.n-t2{font-size:.68rem;color:var(--muted);margin-top:2px}
+.toggle{position:relative;width:42px;height:23px;flex-shrink:0}
+.toggle input{display:none}
+.tog-track{
+  position:absolute;inset:0;border-radius:12px;background:var(--surface2);
+  border:1px solid var(--border);cursor:pointer;transition:all .3s;
+}
+.tog-track::after{
+  content:'';position:absolute;width:17px;height:17px;border-radius:50%;
+  background:var(--muted);top:2px;left:2px;transition:all .3s;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+.toggle input:checked+.tog-track{background:var(--accent);border-color:var(--accent)}
+.toggle input:checked+.tog-track::after{transform:translateX(19px);background:#fff}
+
+/* IMSAK ROW (Ramadan only) */
+.imsak-row{border-style:dashed!important;opacity:.75}
+.imsak-row .p-en{color:var(--accent2)!important}
+.imsak-row .p-time{color:var(--accent2)!important;font-size:1.15rem!important}
+.imsak-row .p-ar{color:var(--accent2)!important;opacity:.7}
+.imsak-row.is-past{opacity:.28}
+
+/* LOADING / ERROR */
+.loading{display:flex;flex-direction:column;align-items:center;padding:80px 0;gap:14px;color:var(--muted);font-size:.84rem;letter-spacing:.4px}
+.loader{width:34px;height:34px;border:1.5px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{text-align:center;padding:40px 20px;color:var(--muted);font-size:.84rem;line-height:1.7}
+.err button{
+  display:inline-block;margin-top:12px;background:var(--surface2);
+  border:1px solid var(--accent);color:var(--accent);padding:8px 20px;
+  border-radius:8px;font-size:.78rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;
+}
+.err button:hover{background:var(--accent);color:var(--bg)}
+
+/* ANIMATIONS */
+@keyframes fadeD{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeU{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="tooltip" id="tooltip"></div>
-
-<!-- HERO -->
-<section class="hero" style="max-width:none; padding:0; min-height:100vh; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-  <div class="hero-bg-ring"></div>
-  <div class="hero-bg-ring"></div>
-  <div class="hero-bg-ring"></div>
-  <div class="hero-bg-ring"></div>
-
-  <div class="logo-container" onclick="rotateLogo(this)" title="Klik untuk berputar!">
-    <svg class="logo-svg" viewBox="0 0 16 16" fill="#da7756" xmlns="http://www.w3.org/2000/svg">
-      <path d="m3.127 10.604 3.135-1.76.053-.153-.053-.085H6.11l-.525-.032-1.791-.048-1.554-.065-1.505-.08-.38-.081L0 7.832l.036-.234.32-.214.455.04 1.009.069 1.513.105 1.097.064 1.626.17h.259l.036-.105-.089-.065-.068-.064-1.566-1.062-1.695-1.121-.887-.646-.48-.327-.243-.306-.104-.67.435-.48.585.04.15.04.593.456 1.267.981 1.654 1.218.242.202.097-.068.012-.049-.109-.181-.9-1.626-.96-1.655-.428-.686-.113-.411a2 2 0 0 1-.068-.484l.496-.674L4.446 0l.662.089.279.242.411.94.666 1.48 1.033 2.014.302.597.162.553.06.17h.105v-.097l.085-1.134.157-1.392.154-1.792.052-.504.25-.605.497-.327.387.186.319.456-.045.294-.19 1.23-.37 1.93-.243 1.29h.142l.161-.16.654-.868 1.097-1.372.484-.545.565-.601.363-.287h.686l.505.751-.226.775-.707.895-.585.759-.839 1.13-.524.904.048.072.125-.012 1.897-.403 1.024-.186 1.223-.21.553.258.06.263-.218.536-1.307.323-1.533.307-2.284.54-.028.02.032.04 1.029.098.44.024h1.077l2.005.15.525.346.315.424-.053.323-.807.411-3.631-.863-.872-.218h-.12v.073l.726.71 1.331 1.202 1.667 1.55.084.383-.214.302-.226-.032-1.464-1.101-.565-.497-1.28-1.077h-.084v.113l.295.432 1.557 2.34.08.718-.112.234-.404.141-.444-.08-.911-1.28-.94-1.44-.759-1.291-.093.053-.448 4.821-.21.246-.484.186-.403-.307-.214-.496.214-.98.258-1.28.21-1.016.19-1.263.112-.42-.008-.028-.092.012-.953 1.307-1.448 1.957-1.146 1.227-.274.109-.477-.247.045-.44.266-.39 1.586-2.018.956-1.25.617-.723-.004-.105h-.036l-4.212 2.736-.75.096-.324-.302.04-.496.154-.162 1.267-.871z"/>
-    </svg>
-  </div>
-
-  <p class="hero-eyebrow">Anatomi Sebuah Simbol</p>
-  <h1 class="hero-title">Logo <em>Claude</em> —<br>Sejarah & Makna</h1>
-  <p class="hero-sub">Dari starburst ke filosofi AI · Sebuah eksplorasi interaktif</p>
-
-  <div class="scroll-cta">
-    <span>Gulir ke bawah</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<!-- NAV -->
-<nav id="main-nav">
-  <a href="#sejarah">Sejarah</a>
-  <a href="#nama">Nama</a>
-  <a href="#anatomi">Anatomi Logo</a>
-  <a href="#warna">Warna</a>
-  <a href="#filosofi">Filosofi</a>
-</nav>
-
-<!-- SEJARAH -->
-<section id="sejarah">
-  <p class="section-label">01 — Asal Usul</p>
-  <h2 class="section-title">Dari Stealth Mode ke Dunia</h2>
-  <p class="body-text">
-    Anthropic didirikan pada 2021 oleh Dario Amodei, Daniela Amodei, dan sejumlah peneliti mantan OpenAI. Mereka ingin membangun AI yang tidak hanya cerdas, tapi juga aman, steerable, dan selaras dengan nilai manusia — sebuah misi yang kemudian terpatri di setiap pixel identitas visual mereka.
-  </p>
-  <p class="body-text">
-    Studio desain <strong>Geist</strong> dipercaya membangun brand dari nol sejak Anthropic masih dalam mode stealth. Selama dua setengah tahun, mereka merancang visual identity yang mencerminkan nilai pendiri: human-centered, scientifically rigorous, dan jauh dari klise tech startup.
-  </p>
-
-  <div class="big-quote">
-    <p>"Segala sesuatu yang dilakukan Anthropic berfokus pada penyelarasan teknologi dengan nilai manusia."</p>
-    <cite>— Geist Studio, Tim Desain Anthropic</cite>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-year">2021</div>
-      <h3>Anthropic Berdiri</h3>
-      <p class="body-text" style="margin:0">Didirikan oleh mantan peneliti OpenAI. Geist Studio mulai membangun brand identity dari stealth mode — logo, tipografi, sistem warna, dan website.</p>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-year">Mid 2023</div>
-      <h3>Claude Diluncurkan ke Publik</h3>
-      <p class="body-text" style="margin:0">Logo starburst / pinwheel terra cotta debut bersama peluncuran Claude. Brand langsung dikenal karena kehangatan warnanya yang unik di antara AI kompetitor.</p>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-year">2024</div>
-      <h3>Claude 3 Family</h3>
-      <p class="body-text" style="margin:0">Opus, Sonnet, Haiku lahir. Logo tetap stabil — sinyal bahwa Anthropic percaya pada konsistensi brand sebagai fondasi kepercayaan.</p>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-year">2025</div>
-      <h3>Claude 4 & Seterusnya</h3>
-      <p class="body-text" style="margin:0">Model makin canggih, identitas visual tetap sama. Stabilitas logo ini sendiri adalah pesan: kepercayaan dibangun lewat konsistensi, bukan gimmick.</p>
+  <div class="topbar">
+    <div class="app-title">Sholat</div>
+    <div class="controls">
+      <button class="ctrl-btn" onclick="toggleNumeral()" title="Ganti numeral">
+        <svg viewBox="0 0 20 16" fill="currentColor"><text y="13" font-size="13">١٢</text></svg>
+        <span id="num-lbl">٣٤٥</span>
+      </button>
+      <button class="ctrl-btn" onclick="toggleTheme()" title="Ganti tema">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </div>
   </div>
-</section>
 
-<div class="divider" style="max-width:900px;margin:0 auto;"></div>
+  <div class="loc-bar" id="loc">Mendeteksi lokasi…</div>
 
-<!-- NAMA -->
-<section id="nama">
-  <p class="section-label">02 — Asal Nama</p>
-  <h2 class="section-title">Claude = Claude Shannon</h2>
-  <p class="body-text">
-    Nama "Claude" bukan kebetulan. Ia adalah penghormatan kepada <strong>Claude Shannon</strong> (1916–2001), matematikawan dan electrical engineer Amerika yang dikenal sebagai <em>Bapak Teori Informasi</em>.
-  </p>
-  <p class="body-text">
-    Pada 1948, Shannon menerbitkan paper legendaris <em>"A Mathematical Theory of Communication"</em> yang memperkenalkan konsep <strong>"bit"</strong> sebagai satuan informasi — fondasi dari seluruh dunia komputasi modern. Tanpanya, internet, komputer, dan AI seperti yang kita kenal hari ini mungkin tidak ada.
-  </p>
-  <p class="body-text">
-    Dengan menamakan AI-nya "Claude", Anthropic mengklaim warisan intelektual yang dalam: bahwa pekerjaan mereka bukan sekadar produk teknologi, melainkan kelanjutan dari riset ilmiah yang punya akar akademis serius.
-  </p>
-
-  <div class="big-quote">
-    <p>"Penamaan ini menambahkan lapisan otoritas intelektual — dan desain logo secara halus memperkuat warisan tersebut lewat strukturnya yang logis dan teratur."</p>
-    <cite>— Analisis Brand Claude</cite>
+  <div class="clock-wrap">
+    <div class="live-clock">
+      <span id="ch" class="n">00</span><span class="colon">:</span><span id="cm" class="n">00</span><span class="colon">:</span><span id="cs" class="n">00</span>
+    </div>
+    <div class="clock-date" id="cdate">—</div>
+    <div class="hijri" id="hijri"></div>
   </div>
-</section>
 
-<div class="divider" style="max-width:900px;margin:0 auto;"></div>
-
-<!-- ANATOMI LOGO -->
-<section id="anatomi">
-  <p class="section-label">03 — Desain</p>
-  <h2 class="section-title">Anatomi Logo</h2>
-  <p class="body-text">Setiap elemen dirancang dengan niat. Klik setiap item untuk menyoroti bagian terkait.</p>
-
-  <div class="anatomy-wrapper">
-    <div class="anatomy-logo">
-      <svg class="anatomy-svg" id="anatomy-logo-svg" viewBox="0 0 16 16" fill="#da7756" xmlns="http://www.w3.org/2000/svg">
-        <path id="main-path" d="m3.127 10.604 3.135-1.76.053-.153-.053-.085H6.11l-.525-.032-1.791-.048-1.554-.065-1.505-.08-.38-.081L0 7.832l.036-.234.32-.214.455.04 1.009.069 1.513.105 1.097.064 1.626.17h.259l.036-.105-.089-.065-.068-.064-1.566-1.062-1.695-1.121-.887-.646-.48-.327-.243-.306-.104-.67.435-.48.585.04.15.04.593.456 1.267.981 1.654 1.218.242.202.097-.068.012-.049-.109-.181-.9-1.626-.96-1.655-.428-.686-.113-.411a2 2 0 0 1-.068-.484l.496-.674L4.446 0l.662.089.279.242.411.94.666 1.48 1.033 2.014.302.597.162.553.06.17h.105v-.097l.085-1.134.157-1.392.154-1.792.052-.504.25-.605.497-.327.387.186.319.456-.045.294-.19 1.23-.37 1.93-.243 1.29h.142l.161-.16.654-.868 1.097-1.372.484-.545.565-.601.363-.287h.686l.505.751-.226.775-.707.895-.585.759-.839 1.13-.524.904.048.072.125-.012 1.897-.403 1.024-.186 1.223-.21.553.258.06.263-.218.536-1.307.323-1.533.307-2.284.54-.028.02.032.04 1.029.098.44.024h1.077l2.005.15.525.346.315.424-.053.323-.807.411-3.631-.863-.872-.218h-.12v.073l.726.71 1.331 1.202 1.667 1.55.084.383-.214.302-.226-.032-1.464-1.101-.565-.497-1.28-1.077h-.084v.113l.295.432 1.557 2.34.08.718-.112.234-.404.141-.444-.08-.911-1.28-.94-1.44-.759-1.291-.093.053-.448 4.821-.21.246-.484.186-.403-.307-.214-.496.214-.98.258-1.28.21-1.016.19-1.263.112-.42-.008-.028-.092.012-.953 1.307-1.448 1.957-1.146 1.227-.274.109-.477-.247.045-.44.266-.39 1.586-2.018.956-1.25.617-.723-.004-.105h-.036l-4.212 2.736-.75.096-.324-.302.04-.496.154-.162 1.267-.871z"/>
-      </svg>
-    </div>
-
-    <div class="anatomy-list" id="anatomy-list">
-      <div class="anatomy-item" data-highlight="petals" onclick="highlightPart(this, 'petals')">
-        <span class="anatomy-num">01</span>
-        <div>
-          <div class="anatomy-item-title">Starburst / Pinwheel</div>
-          <div class="anatomy-item-desc">Sembilan petal yang memancar ke luar — simbol ide yang menyebar, energi yang mengalir dari satu titik ke segala arah. Bukan huruf "C", melainkan representasi abstrak pikiran yang memancar.</div>
-        </div>
-      </div>
-      <div class="anatomy-item" data-highlight="color" onclick="highlightPart(this, 'color')">
-        <span class="anatomy-num">02</span>
-        <div>
-          <div class="anatomy-item-title">Terra Cotta Warm</div>
-          <div class="anatomy-item-desc">Warna utama #da7756 — terra cotta hangat yang sengaja menghindari biru teknologi khas AI. Kehangatan ini menyiratkan empati, bukan dinginnya mesin.</div>
-        </div>
-      </div>
-      <div class="anatomy-item" data-highlight="center" onclick="highlightPart(this, 'center')">
-        <span class="anatomy-num">03</span>
-        <div>
-          <div class="anatomy-item-title">Titik Pusat</div>
-          <div class="anatomy-item-desc">Lingkaran hitam di tengah sebagai anchor — stabilitas, kepercayaan, dan titik fokus dari mana semua radiasi bermakna dimulai.</div>
-        </div>
-      </div>
-      <div class="anatomy-item" data-highlight="rotate" onclick="highlightPart(this, 'rotate')">
-        <span class="anatomy-num">04</span>
-        <div>
-          <div class="anatomy-item-title">Simetri Radial</div>
-          <div class="anatomy-item-desc">Susunan rotasional 40° per petal menciptakan kesan pergerakan berkelanjutan — AI yang terus belajar dan berkembang tanpa henti.</div>
-        </div>
-      </div>
-    </div>
+  <div id="app">
+    <div class="loading"><div class="loader"></div>Memuat jadwal…</div>
   </div>
-</section>
 
-<div class="divider" style="max-width:900px;margin:0 auto;"></div>
-
-<!-- WARNA -->
-<section id="warna">
-  <p class="section-label">04 — Palet Warna</p>
-  <h2 class="section-title">Sistem Warna yang Disengaja</h2>
-  <p class="body-text">
-    Tim Geist mengembangkan sistem warna yang bisa menangani dua kebutuhan berbeda: marketing communications dan product UI — semuanya dengan kehangatan yang konsisten.
-  </p>
-
-  <div class="color-showcase">
-    <div class="color-chip" onclick="copyColor('#da7756')">
-      <div class="color-swatch" style="background:#da7756;"></div>
-      <div class="color-info">
-        <div class="color-name">Terra Cotta</div>
-        <div class="color-hex">#da7756 · Primary</div>
-      </div>
-    </div>
-    <div class="color-chip" onclick="copyColor('#c96840')">
-      <div class="color-swatch" style="background:#c96840;"></div>
-      <div class="color-info">
-        <div class="color-name">Deep Terra</div>
-        <div class="color-hex">#c96840 · Accent</div>
-      </div>
-    </div>
-    <div class="color-chip" onclick="copyColor('#faf6f1')">
-      <div class="color-swatch" style="background:#faf6f1; border:1px solid #e8ddd0;"></div>
-      <div class="color-info">
-        <div class="color-name">Warm Cream</div>
-        <div class="color-hex">#faf6f1 · Background</div>
-      </div>
-    </div>
-    <div class="color-chip" onclick="copyColor('#1a1208')">
-      <div class="color-swatch" style="background:#1a1208;"></div>
-      <div class="color-info">
-        <div class="color-name">Warm Ink</div>
-        <div class="color-hex">#1a1208 · Text</div>
-      </div>
-    </div>
-  </div>
-  <p class="body-text" style="margin-top:1.5rem; font-size:0.75rem; color:var(--warm-gray);">💡 Klik kartu warna untuk copy HEX code-nya!</p>
-</section>
-
-<div class="divider" style="max-width:900px;margin:0 auto;"></div>
-
-<!-- FILOSOFI -->
-<section id="filosofi">
-  <p class="section-label">05 — Makna Lebih Dalam</p>
-  <h2 class="section-title">Logo sebagai Pernyataan Nilai</h2>
-  <p class="body-text">
-    Di industri AI yang berlomba-lomba dengan neon, gradien agresif, dan estetika super-futuristik — Claude memilih restraint. Dan justru itulah yang membuatnya menonjol. Logo ini bukan sekadar simbol, tapi <em>janji</em>.
-  </p>
-
-  <div class="cards-grid">
-    <div class="phil-card">
-      <div class="card-icon">🔍</div>
-      <h3>Transparansi & Kepercayaan</h3>
-      <p>Desain bersih tanpa ornamen berlebihan mencerminkan komitmen Anthropic terhadap keterbukaan dalam pengembangan AI. Tidak ada yang disembunyikan.</p>
-    </div>
-    <div class="phil-card">
-      <div class="card-icon">🤝</div>
-      <h3>Human-Centric Design</h3>
-      <p>Tepi yang lembut, warna hangat, dan proporsi yang approachable menyiratkan empati. Claude dirancang untuk mendampingi manusia, bukan mendominasi.</p>
-    </div>
-    <div class="phil-card">
-      <div class="card-icon">🔬</div>
-      <h3>Akar Ilmiah</h3>
-      <p>Referensi ke Claude Shannon dan strukturnya yang logis-teratur menandakan bahwa ini bukan sekadar hype — ada riset mendalam di baliknya.</p>
-    </div>
-    <div class="phil-card">
-      <div class="card-icon">⚖️</div>
-      <h3>Safety First</h3>
-      <p>Ketika kompetitor tampil flashy, Claude tampil tenang. Restraint visual adalah metafora dari prinsip kerja AI yang hati-hati dan bertanggung jawab.</p>
-    </div>
-    <div class="phil-card">
-      <div class="card-icon">✨</div>
-      <h3>Ide yang Memancar</h3>
-      <p>Starburst adalah visualisasi dari momen pencerahan — saat percakapan menghasilkan insight. Setiap petal adalah ide yang baru lahir.</p>
-    </div>
-    <div class="phil-card">
-      <div class="card-icon">📐</div>
-      <h3>Konsistensi = Kepercayaan</h3>
-      <p>Logo tidak berubah sejak 2021. Di dunia AI yang bergerak cepat, stabilitas brand adalah sinyal kepercayaan yang paling kuat.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  Dibuat dengan ❤️ oleh <span>Jean</span> · Semua informasi berdasarkan riset brand Anthropic & Geist Studio · 2026
-</footer>
-
+</div>
 <script>
-  // Intersection Observer for animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add('visible');
-        }, entry.target.dataset.delay || 0);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
+// ─── CONFIG ───
+const PRAYERS=[
+  {key:'subuh',  name:'Subuh',  ar:'الفجر' },
+  {key:'dzuhur', name:'Dzuhur', ar:'الظهر' },
+  {key:'ashar',  name:'Ashar',  ar:'العصر' },
+  {key:'maghrib',name:'Maghrib',ar:'المغرب'},
+  {key:'isya',   name:'Isya',   ar:'العشاء'},
+];
+const AR=['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+const DAYS=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const MONTHS=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
-  document.querySelectorAll('.timeline-item, .phil-card').forEach((el, i) => {
-    el.dataset.delay = i * 100;
-    observer.observe(el);
-  });
+// ─── STATE ───
+let pData=null, notifOn=false, notifTimers=[], cdTick=null;
+let numMode='latin', themeMode='dark';
+let isRamadan=false, imsakData=null;
 
-  // Petal tooltip
-  document.querySelectorAll('.petal[data-tip]').forEach(petal => {
-    const tooltip = document.getElementById('tooltip');
-    petal.addEventListener('mousemove', (e) => {
-      tooltip.style.left = e.clientX + 12 + 'px';
-      tooltip.style.top = e.clientY - 30 + 'px';
-      tooltip.textContent = petal.dataset.tip;
-      tooltip.style.opacity = '1';
-    });
-    petal.addEventListener('mouseleave', () => {
-      tooltip.style.opacity = '0';
-    });
-  });
+const n2 = v => String(v).padStart(2,'0');
+const toN = s => numMode==='latin' ? s : String(s).replace(/[0-9]/g,d=>AR[+d]);
 
-  // Anatomy highlight
-  function highlightPart(item, part) {
-    document.querySelectorAll('.anatomy-item').forEach(el => el.classList.remove('active'));
-    item.classList.add('active');
+// ─── CLOCK ───
+function tickClock(){
+  const now=new Date();
+  document.getElementById('ch').textContent=toN(n2(now.getHours()));
+  document.getElementById('cm').textContent=toN(n2(now.getMinutes()));
+  document.getElementById('cs').textContent=toN(n2(now.getSeconds()));
+  document.getElementById('cdate').textContent=
+    `${DAYS[now.getDay()]}, ${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+}
+setInterval(tickClock,1000); tickClock();
 
-    const svg = document.getElementById('anatomy-logo-svg');
-    const path = document.getElementById('main-path');
+// ─── THEME ───
+function toggleTheme(){
+  themeMode=themeMode==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',themeMode);
+  const ico=document.getElementById('theme-icon');
+  ico.innerHTML=themeMode==='light'
+    ?'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+    :'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  if(pData) renderApp();
+}
 
-    // Reset
-    path.style.fill = '#da7756';
-    path.style.opacity = '1';
-    path.style.filter = '';
-    svg.style.animation = '';
-    svg.style.transform = '';
+// ─── NUMERAL ───
+function toggleNumeral(){
+  numMode=numMode==='latin'?'arabic':'latin';
+  document.getElementById('num-lbl').textContent=numMode==='latin'?'٣٤٥':'123';
+  tickClock();
+  if(pData){renderApp();startCountdown();}
+}
 
-    if (part === 'petals') {
-      path.style.fill = '#f0a070';
-      path.style.filter = 'drop-shadow(0 0 6px rgba(218,119,86,0.6))';
-    } else if (part === 'color') {
-      path.style.fill = '#ff7744';
-      path.style.filter = 'drop-shadow(0 0 4px rgba(255,100,50,0.5))';
-    } else if (part === 'center') {
-      path.style.opacity = '0.6';
-      path.style.filter = 'drop-shadow(0 0 8px #da7756)';
-    } else if (part === 'rotate') {
-      svg.style.animation = 'logo-spin-slow 3s linear infinite';
+// ─── GPS & API ───
+function init(){
+  if(!navigator.geolocation){showErr('Browser tidak mendukung geolokasi.');return;}
+  navigator.geolocation.getCurrentPosition(onPos,onGeoErr,{enableHighAccuracy:true,timeout:12000});
+}
+
+async function onPos(pos){
+  const {latitude:lat,longitude:lng}=pos.coords;
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=id`);
+    const d=await r.json();
+    const addr=d.address||{};
+    const countryCode=(addr.country_code||'').toLowerCase();
+
+    // Kalau di luar Indonesia → pakai Aladhan
+    if(countryCode && countryCode!=='id'){
+      const cityLabel=addr.city||addr.town||addr.county||addr.state||d.display_name||'Unknown';
+      setLoc(`📍 <span>${cityLabel}</span>`);
+      await fetchAladhan(lat,lng,cityLabel);
+      return;
+    }
+
+    // Indonesia: kumpulkan semua level wilayah dari Nominatim
+    const addressLevels=[
+      addr.village, addr.suburb, addr.town, addr.city_district,
+      addr.city, addr.county, addr.state_district, addr.state
+    ].filter(Boolean);
+
+    const displayName=addressLevels[0]||'Jakarta';
+    setLoc(`📍 <span>${displayName}</span>`);
+    await searchCity(addressLevels);
+  }catch{
+    setLoc(`📍 <span>Jakarta (default)</span>`);
+    await searchCity(['jakarta']);
+  }
+}
+
+async function searchCity(addressLevels){
+  // addressLevels = array dari spesifik ke umum, e.g. ['Bojong Gede','Bogor','Jawa Barat']
+  if(!Array.isArray(addressLevels)) addressLevels=[addressLevels];
+
+  for(const level of addressLevels){
+    const candidates=buildCandidates(level);
+    for(const kw of candidates){
+      try{
+        const r=await fetch(`https://api.myquran.com/v3/sholat/kabkota/cari/${encodeURIComponent(kw)}`);
+        const d=await r.json();
+        if(d.status && d.data?.length){
+          setLoc(`📍 <span>${d.data[0].lokasi}</span>`);
+          await fetchToday(d.data[0].id);
+          return;
+        }
+      }catch{}
     }
   }
+  showErr(`Kota tidak ditemukan untuk area ini.<br>Coba refresh halaman.`);
+}
 
-  // Copy color
-  function copyColor(hex) {
-    navigator.clipboard.writeText(hex).catch(() => {});
-    const tooltip = document.getElementById('tooltip');
-    tooltip.textContent = hex + ' disalin!';
-    tooltip.style.left = '50%';
-    tooltip.style.top = '50%';
-    tooltip.style.opacity = '1';
-    setTimeout(() => tooltip.style.opacity = '0', 1500);
-  }
+function buildCandidates(keyword) {
+  const kw = keyword.toLowerCase().trim();
+  const candidates = new Set();
 
-  // Logo click rotate
-  function rotateLogo(el) {
-    el.querySelector('svg').style.animation = 'none';
-    el.querySelector('svg').style.transform = 'rotate(360deg)';
-    el.querySelector('svg').style.transition = 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
-    setTimeout(() => {
-      el.querySelector('svg').style.transform = '';
-      el.querySelector('svg').style.transition = '';
-      el.querySelector('svg').style.animation = '';
-    }, 800);
-  }
+  // Strip direction words and admin prefixes (Nominatim sering return "South Jakarta", "Kota Bogor", dll)
+  let stripped = kw
+    .replace(/\b(south|north|east|west|central)\s+/gi, '')
+    .replace(/\bkota\s+|kabupaten\s+/gi, '')
+    .trim();
 
-  // Active nav
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('nav a');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+  // Full stripped word
+  candidates.add(stripped);
+
+  // First word only
+  const firstWord = stripped.split(/\s+/)[0];
+  candidates.add(firstWord);
+
+  // Last word only (e.g. "South Jakarta" → "jakarta")
+  const lastWord = kw.split(/\s+/).pop();
+  candidates.add(lastWord);
+
+  // Each word individually
+  kw.split(/\s+/).forEach(w => candidates.add(w));
+
+  // Remove empties, sort by length desc (try more specific first)
+  return [...candidates]
+    .filter(c => c && c.length >= 3)
+    .sort((a,b) => b.length - a.length);
+}
+
+async function fetchToday(id){
+  try{
+    const r=await fetch(`https://api.myquran.com/v3/sholat/jadwal/${id}/today?tz=Asia/Jakarta`);
+    const d=await r.json();
+    if(!d.status) throw 0;
+    const j=Object.values(d.data.jadwal)[0];
+    const today=new Date();
+    pData=PRAYERS.map(p=>{
+      const [h,m]=j[p.key].split(':').map(Number);
+      const dt=new Date(today); dt.setHours(h,m,0,0);
+      return{...p,ts:j[p.key].slice(0,5),dt};
     });
-    navLinks.forEach(a => {
-      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    // Simpan imsak (tersedia di response myquran)
+    if(j.imsak){
+      const [h,m]=j.imsak.split(':').map(Number);
+      const dt=new Date(today); dt.setHours(h,m,0,0);
+      imsakData={key:'imsak',name:'Imsak',ar:'الإمساك',ts:j.imsak.slice(0,5),dt};
+    }
+    await fetchHijri(); // harus selesai dulu supaya isRamadan & hijri text sudah di-set sebelum render
+    renderApp();
+    startCountdown();
+  }catch{showErr('Gagal memuat jadwal. Periksa koneksi.');}
+}
+
+async function fetchAladhan(lat,lng,cityLabel){
+  try{
+    const r=await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=2`);
+    const d=await r.json();
+    if(d.code!==200) throw 0;
+    const t=d.data.timings;
+    const today=new Date();
+    const keyMap={subuh:'Fajr',dzuhur:'Dhuhr',ashar:'Asr',maghrib:'Maghrib',isya:'Isha'};
+    pData=PRAYERS.map(p=>{
+      const ts=t[keyMap[p.key]]?.slice(0,5)||'00:00';
+      const [h,m]=ts.split(':').map(Number);
+      const dt=new Date(today); dt.setHours(h,m,0,0);
+      return{...p,ts,dt};
     });
+    // Imsak dari Aladhan
+    if(t.Imsak){
+      const ts=t.Imsak.slice(0,5);
+      const [h,m]=ts.split(':').map(Number);
+      const dt=new Date(today); dt.setHours(h,m,0,0);
+      imsakData={key:'imsak',name:'Imsak',ar:'الإمساك',ts,dt};
+    }
+    // Deteksi Ramadan dari Aladhan hijri date
+    const hijriMonth=parseInt(d.data.date?.hijri?.month?.number||0);
+    isRamadan=(hijriMonth===9);
+    // Tampilkan tanggal Hijriyah dari Aladhan juga
+    try{
+      const hd=d.data.date.hijri;
+      document.getElementById('hijri').textContent=
+        `${hd.weekday.ar}, ${toN(hd.day)} ${hd.month.ar} ${toN(hd.year)} H`;
+    }catch{}
+    setLoc(`📍 <span>${cityLabel}</span>`);
+    renderApp();
+    startCountdown();
+  }catch{showErr('Gagal memuat jadwal. Periksa koneksi.');}
+}
+
+async function fetchHijri(){
+  try{
+    const r=await fetch('https://api.myquran.com/v3/cal/today?tz=Asia/Jakarta');
+    const d=await r.json();
+    if(d.status){
+      const h=d.data.hijr;
+      document.getElementById('hijri').textContent=
+        `${h.dayName}, ${toN(h.day)} ${h.monthName} ${toN(h.year)} H`;
+      // Deteksi Ramadan — coba berbagai field name dari myquran API
+      const mNum = parseInt(h.monthNumber || h.month || 0);
+      isRamadan = (mNum === 9);
+    }
+  }catch{}
+}
+
+function onGeoErr(){
+  setLoc(`📍 <span>Jakarta (default)</span>`);
+  searchCity(['jakarta']);
+}
+function setLoc(html){document.getElementById('loc').innerHTML=html;}
+
+// ─── HELPERS ───
+function getNext(){
+  const now=new Date();
+  return pData.find(p=>p.dt>now)||pData[0];
+}
+function getPrev(){
+  const now=new Date();
+  let last=pData[pData.length-1];
+  for(let i=0;i<pData.length;i++) if(now<pData[i].dt) return i===0?last:pData[i-1];
+  return last;
+}
+
+// ─── RENDER ───
+function renderApp(){
+  const next=getNext(), prev=getPrev(), now=new Date();
+  const total=next.dt-prev.dt, elapsed=now-prev.dt;
+  const pct=Math.min(100,Math.max(0,(elapsed/total)*100)).toFixed(1);
+
+  // Imsak row — hanya tampil di bulan Ramadan
+  const imsakRow = (isRamadan && imsakData) ? `
+    <div class="p-row imsak-row${imsakData.dt<now?' is-past':''}">
+      <span class="p-idx n">·</span>
+      <div class="p-info">
+        <span class="p-en">${imsakData.name}</span>
+        <span class="p-ar">${imsakData.ar}</span>
+      </div>
+      <span class="p-time n">${toN(imsakData.ts)}</span>
+      <span class="p-dot"></span>
+    </div>` : '';
+
+  const rows=pData.map((p,i)=>{
+    const isPast=p.dt<now&&p.key!==next.key;
+    const isNext=p.key===next.key;
+    const isSubuh=p.key==='subuh';
+    return`${isSubuh ? imsakRow : ''}<div class="p-row${isNext?' is-next':''}${isPast?' is-past':''}">
+      <span class="p-idx n">${toN(i+1)}</span>
+      <div class="p-info">
+        <span class="p-en">${p.name}</span>
+        <span class="p-ar">${p.ar}</span>
+      </div>
+      <span class="p-time n">${toN(p.ts)}</span>
+      <span class="p-dot"></span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('app').innerHTML=`
+    <div class="next-card">
+      <div class="next-lbl">Waktu Sholat Berikutnya</div>
+      <div class="next-row">
+        <div>
+          <div class="next-name">${next.name}</div>
+          <div class="next-ar">${next.ar}</div>
+        </div>
+        <div class="next-time n">${toN(next.ts)}</div>
+      </div>
+      <div class="cd-wrap">
+        <div class="cd-blk"><span class="cd-num n" id="cdh">00</span><span class="cd-unit">jam</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-blk"><span class="cd-num n" id="cdm">00</span><span class="cd-unit">menit</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-blk"><span class="cd-num n" id="cds">00</span><span class="cd-unit">detik</span></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-lbl">
+          <span>${prev.name}</span>
+          <span id="pct-lbl">${toN(pct)}%</span>
+          <span>${next.name}</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="pfill" style="width:${pct}%"></div></div>
+      </div>
+    </div>
+    <div class="prayer-list">${rows}</div>
+    <div class="notif-bar">
+      <div>
+        <div class="n-t1">Pengingat Sholat</div>
+        <div class="n-t2">Notifikasi 5 menit sebelum waktu</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="notif-chk" onchange="toggleNotif(this.checked)"${notifOn?' checked':''}>
+        <span class="tog-track"></span>
+      </label>
+    </div>`;
+  updateCD();
+}
+
+// ─── COUNTDOWN ───
+function startCountdown(){
+  if(cdTick) clearInterval(cdTick);
+  cdTick=setInterval(()=>{
+    updateCD();
+    const next=getNext();
+    const diff=next.dt-new Date();
+    if(diff>=0&&diff<1100) setTimeout(()=>{renderApp();startCountdown();},1100);
+  },1000);
+}
+
+function updateCD(){
+  if(!pData) return;
+  const next=getNext();
+  let diff=next.dt-new Date();
+  if(diff<0) diff+=86400000;
+  const h=n2(Math.floor(diff/3600000));
+  const m=n2(Math.floor((diff%3600000)/60000));
+  const s=n2(Math.floor((diff%60000)/1000));
+  const eh=document.getElementById('cdh');
+  const em=document.getElementById('cdm');
+  const es=document.getElementById('cds');
+  if(eh) eh.textContent=toN(h);
+  if(em) em.textContent=toN(m);
+  if(es) es.textContent=toN(s);
+  // progress
+  const prev=getPrev();
+  const total=next.dt-prev.dt, elapsed=new Date()-prev.dt;
+  const pct=Math.min(100,Math.max(0,(elapsed/total)*100)).toFixed(1);
+  const pf=document.getElementById('pfill');
+  const pl=document.getElementById('pct-lbl');
+  if(pf) pf.style.width=pct+'%';
+  if(pl) pl.textContent=toN(pct)+'%';
+}
+
+// ─── NOTIF ───
+async function toggleNotif(on){
+  if(on){
+    const p=await Notification.requestPermission();
+    if(p!=='granted'){
+      alert('Aktifkan izin notifikasi di browser.');
+      document.getElementById('notif-chk').checked=false;
+      notifOn=false; return;
+    }
+    notifOn=true; scheduleNotifs();
+  }else{
+    notifOn=false;
+    notifTimers.forEach(clearTimeout); notifTimers=[];
+  }
+}
+function scheduleNotifs(){
+  notifTimers.forEach(clearTimeout); notifTimers=[];
+  const now=new Date();
+  // Jadwalkan notif untuk waktu sholat wajib
+  pData.forEach(p=>{
+    const pre=p.dt-now-300000;
+    if(pre>0) notifTimers.push(setTimeout(()=>
+      new Notification(`🕌 ${p.name} dalam 5 menit`,{body:`Pukul ${p.ts}`}),pre));
+    const ex=p.dt-now;
+    if(ex>0) notifTimers.push(setTimeout(()=>
+      new Notification(`🕌 Waktu ${p.name}`,{body:`Saatnya sholat ${p.name}`}),ex));
   });
+  // Notif Imsak (Ramadan only)
+  if(isRamadan && imsakData){
+    const pre=imsakData.dt-now-300000;
+    if(pre>0) notifTimers.push(setTimeout(()=>
+      new Notification(`🌙 Imsak dalam 5 menit`,{body:`Imsak pukul ${imsakData.ts}`}),pre));
+    const ex=imsakData.dt-now;
+    if(ex>0) notifTimers.push(setTimeout(()=>
+      new Notification(`🌙 Waktu Imsak`,{body:`Segera hentikan makan & minum`}),ex));
+  }
+}
 
-  // Add slow spin keyframe
-  const style = document.createElement('style');
-  style.textContent = '@keyframes logo-spin-slow { to { transform: rotate(360deg); } }';
-  document.head.appendChild(style);
+function showErr(msg){
+  document.getElementById('app').innerHTML=
+    `<div class="err"><div>${msg}</div><button onclick="init()">Coba Lagi</button></div>`;
+}
+
+init();
 </script>
 </body>
 </html>
