@@ -7,51 +7,50 @@
 
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #141E30, #243B55);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #141e30, #243b55);
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
         margin: 0;
-        color: white;
+        color: #fff;
+        padding: 20px;
+        box-sizing: border-box;
     }
 
     .card {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(12px);
-        padding: 30px;
-        border-radius: 16px;
-        width: 340px;
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(14px);
+        padding: 24px 20px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
         text-align: center;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
     }
 
     h1 {
-        font-size: 20px;
-        margin-bottom: 15px;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        line-height: 1.2;
     }
 
-    select, input {
+    select, input, button {
         width: 100%;
-        padding: 10px;
-        margin-top: 10px;
+        padding: 0.65rem;
+        margin-top: 0.75rem;
         border-radius: 8px;
         border: none;
-        font-size: 15px;
+        font-size: 1rem;
+        box-sizing: border-box;
     }
 
     button {
-        margin-top: 15px;
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
         background: #00c6ff;
-        color: white;
-        font-size: 15px;
+        color: #fff;
         cursor: pointer;
-        transition: 0.3s;
+        transition: background 0.25s;
     }
 
     button:hover {
@@ -59,36 +58,45 @@
     }
 
     .result {
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
+        margin-top: 1.25rem;
+        font-size: 1.125rem;
+        font-weight: 600;
     }
 
     .info {
-        font-size: 13px;
-        margin-top: 10px;
+        font-size: 0.85rem;
+        margin-top: 0.75rem;
         opacity: 0.8;
+        line-height: 1.3;
     }
     /* clock styling */
     .clocks {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
     }
     .clock {
-        flex: 1;
+        flex: 1 1 100px;
         padding: 10px;
-        background: rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.15);
         border-radius: 8px;
     }
     .clock-label {
-        font-size: 14px;
-        margin-bottom: 5px;
+        font-size: 0.875rem;
+        margin-bottom: 4px;
     }
     .clock-time {
-        font-size: 24px;
-        font-weight: bold;
-    }</style>
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    @media (max-width: 480px) {
+        h1 { font-size: 1.1rem; }
+        .clock-time { font-size: 1.25rem; }
+    }
+</style>
 </head>
 <body>
 
@@ -105,12 +113,24 @@
             <div class="clock-label">India Standard Time</div>
             <div class="clock-time" id="istTime">--:--:--</div>
         </div>
+        <div class="clock" id="sgtClock">
+            <div class="clock-label">Singapore (SGT)</div>
+            <div class="clock-time" id="sgtTime">--:--:--</div>
+        </div>
     </div>
 
-    <select id="direction" onchange="updateTitle()">
-        <option value="IST_TO_WIB">IST ➜ Jakarta (WIB)</option>
-        <option value="WIB_TO_IST">Jakarta (WIB) ➜ IST</option>
-    </select>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+        <select id="fromZone" onchange="updateTitle()">
+            <option value="IST">India Standard Time (IST)</option>
+            <option value="WIB">Jakarta Time (WIB)</option>
+            <option value="SGT">Singapore Time (SGT)</option>
+        </select>
+        <select id="toZone" onchange="updateTitle()">
+            <option value="WIB">Jakarta Time (WIB)</option>
+            <option value="IST">India Standard Time (IST)</option>
+            <option value="SGT">Singapore Time (SGT)</option>
+        </select>
+    </div>
 
     <input type="time" id="timeInput">
 
@@ -119,15 +139,21 @@
     <div class="result" id="result"></div>
 
     <div class="info">
-        IST (UTC+5:30) | Jakarta (UTC+7:00) <br>
-        Difference: 1 hour 30 minutes
+        IST (UTC+5:30) | WIB (UTC+7:00) | SGT (UTC+8:00)
     </div>
 </div>
 
 <script>
+const zones = {
+    IST: {label: "India Standard Time (IST)", offset: 5*60+30},
+    WIB: {label: "Jakarta Time (WIB)", offset: 7*60},
+    SGT: {label: "Singapore Time (SGT)", offset: 8*60}
+};
+
 function convertTime() {
     const input = document.getElementById("timeInput").value;
-    const direction = document.getElementById("direction").value;
+    const from = document.getElementById("fromZone").value;
+    const to = document.getElementById("toZone").value;
     const resultDiv = document.getElementById("result");
 
     if (!input) {
@@ -136,37 +162,16 @@ function convertTime() {
     }
 
     let [hours, minutes] = input.split(":").map(Number);
+    let total = hours*60 + minutes;
+    const diff = zones[to].offset - zones[from].offset;
+    total = (total + diff + 24*60) % (24*60);
+    const rh = Math.floor(total/60);
+    const rm = total % 60;
 
-    if (direction === "IST_TO_WIB") {
-        // Add 1h 30m
-        minutes += 30;
-        if (minutes >= 60) {
-            minutes -= 60;
-            hours += 1;
-        }
-        hours += 1;
-        if (hours >= 24) hours -= 24;
-
-        resultDiv.innerText = 
-            "Jakarta Time: " + 
-            String(hours).padStart(2,"0") + ":" + 
-            String(minutes).padStart(2,"0") + " WIB";
-
-    } else {
-        // Subtract 1h 30m
-        minutes -= 30;
-        if (minutes < 0) {
-            minutes += 60;
-            hours -= 1;
-        }
-        hours -= 1;
-        if (hours < 0) hours += 24;
-
-        resultDiv.innerText = 
-            "IST Time: " + 
-            String(hours).padStart(2,"0") + ":" + 
-            String(minutes).padStart(2,"0") + " IST";
-    }
+    resultDiv.innerText =
+        zones[to].label + ": " +
+        String(rh).padStart(2,"0") + ":" +
+        String(rm).padStart(2,"0");
 }
 
 // live clock updater
@@ -175,11 +180,15 @@ function updateClocks() {
 
     // Jakarta is UTC+7
     const jakarta = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
-    document.getElementById("jakartaTime").innerText = jakarta.toLocaleTimeString();
+    document.getElementById("jakartaTime").innerText = jakarta.toLocaleTimeString("en-US", {hour12: false});
 
     // IST is UTC+5:30 (Asia/Kolkata)
     const ist = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-    document.getElementById("istTime").innerText = ist.toLocaleTimeString();
+    document.getElementById("istTime").innerText = ist.toLocaleTimeString("en-US", {hour12: false});
+
+    // SGT is UTC+8 (Asia/Singapore)
+    const sgt = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Singapore"}));
+    document.getElementById("sgtTime").innerText = sgt.toLocaleTimeString("en-US", {hour12: false});
 }
 
 setInterval(updateClocks, 1000);
@@ -187,13 +196,10 @@ updateClocks();
 
 // update header based on dropdown selection
 function updateTitle() {
-    const sel = document.getElementById("direction").value;
+    const from = document.getElementById("fromZone").value;
+    const to = document.getElementById("toZone").value;
     const title = document.getElementById("converterTitle");
-    if (sel === "IST_TO_WIB") {
-        title.innerText = "IST ➜ Jakarta Converter";
-    } else {
-        title.innerText = "Jakarta ➜ IST Converter";
-    }
+    title.innerText = zones[from].label + " ➜ " + zones[to].label + " Converter";
 }
 
 // initialize title on load
