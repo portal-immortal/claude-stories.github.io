@@ -1,214 +1,657 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IST ↔ Jakarta Time Converter</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Clocks</title>
+  <style>
+    :root {
+      --main-bg-color: #1e1f26;
+      --main-text-color: #ccc;
+      --accent: #f00;
+    }
 
-<style>
+    [data-theme="light"] {
+      --main-bg-color: #fff;
+      --main-text-color: #888888;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #141e30, #243b55);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-        color: #fff;
-        padding: 20px;
-        box-sizing: border-box;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      background-color: var(--main-bg-color);
+      transition: all ease 0.2s;
     }
 
-    .card {
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(14px);
-        padding: 24px 20px;
-        border-radius: 12px;
-        width: 100%;
-        max-width: 400px;
-        text-align: center;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    .page-header {
+      font-size: 2rem;
+      color: var(--main-text-color);
+      padding: 1em 0 0.5em;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      transition: all ease 0.2s;
     }
 
-    h1 {
-        font-size: 1.3rem;
-        margin-bottom: 1rem;
-        line-height: 1.2;
+    .clocks-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 3em;
+      padding: 1em 2em;
+      flex: 1;
     }
 
-    select, input, button {
-        width: 100%;
-        padding: 0.65rem;
-        margin-top: 0.75rem;
-        border-radius: 8px;
-        border: none;
-        font-size: 1rem;
-        box-sizing: border-box;
+    .clock-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
     }
 
-    button {
-        background: #00c6ff;
-        color: #fff;
-        cursor: pointer;
-        transition: background 0.25s;
-    }
-
-    button:hover {
-        background: #0072ff;
-    }
-
-    .result {
-        margin-top: 1.25rem;
-        font-size: 1.125rem;
-        font-weight: 600;
-        background: rgba(255,255,255,0.1);
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.2);
-        transition: all 0.3s ease;
-    }
-
-    .info {
-        font-size: 0.85rem;
-        margin-top: 0.75rem;
-        opacity: 0.8;
-        line-height: 1.3;
-    }
-    /* clock styling */
-    .clocks {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-    .clock {
-        flex: 1 1 100px;
-        padding: 10px;
-        background: rgba(255,255,255,0.15);
-        border-radius: 8px;
-    }
     .clock-label {
-        font-size: 0.875rem;
-        margin-bottom: 4px;
-    }
-    .clock-time {
-        font-size: 1.5rem;
-        font-weight: 700;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.85rem;
+      color: var(--main-text-color);
+      transition: all ease 0.2s;
+      text-align: center;
     }
 
-    @media (max-width: 480px) {
-        h1 { font-size: 1.1rem; }
-        .clock-time { font-size: 1.25rem; }
+    .clock-label .city {
+      font-size: 1.1rem;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.2em;
     }
-</style>
+
+    .clock-label .tz-tag {
+      font-size: 0.7rem;
+      opacity: 0.6;
+    }
+
+    .clock-label .digital-time {
+      display: block;
+      margin-top: 0.4em;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+
+    .clock {
+      height: 18em;
+      width: 18em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--main-bg-color);
+      background-image: url("http://codingstella.com/wp-content/uploads/2024/01/download-3.png");
+      background-position: center center;
+      background-size: cover;
+      border-radius: 50%;
+      border: 4px solid var(--main-bg-color);
+      box-shadow: 0 -15px 15px rgba(255, 255, 255, 0.05),
+        inset 0 -15px 15px rgba(255, 255, 255, 0.05),
+        0 15px 15px rgba(0, 0, 0, 0.3),
+        inset 0 15px 15px rgba(0, 0, 0, 0.3);
+      transition: all ease 0.2s;
+      position: relative;
+    }
+
+    .clock:before {
+      content: "";
+      height: 0.75rem;
+      width: 0.75rem;
+      background-color: var(--main-text-color);
+      border: 2px solid var(--main-bg-color);
+      position: absolute;
+      border-radius: 50%;
+      z-index: 1000;
+      transition: all ease 0.2s;
+    }
+
+    .hand {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .hour-hand {
+      height: 10em;
+      width: 10em;
+    }
+
+    .hour-hand:before {
+      content: "";
+      position: absolute;
+      height: 50%;
+      width: 6px;
+      background-color: var(--main-text-color);
+      border-radius: 6px;
+      transition: all ease 0.2s;
+    }
+
+    .min-hand {
+      height: 12em;
+      width: 12em;
+    }
+
+    .min-hand:before {
+      content: "";
+      height: 50%;
+      width: 4px;
+      background-color: var(--main-text-color);
+      border-radius: 4px;
+      transition: all ease 0.2s;
+    }
+
+    .sec-hand {
+      height: 13em;
+      width: 13em;
+    }
+
+    .sec-hand:before {
+      content: "";
+      height: 60%;
+      width: 2px;
+      background-color: #f00;
+      border-radius: 2px;
+    }
+
+    .switch-cont {
+      margin: 1.5em auto 2em;
+    }
+
+    .switch-btn {
+      font-family: monospace;
+      text-transform: uppercase;
+      outline: none;
+      padding: 0.5rem 1rem;
+      background-color: var(--main-bg-color);
+      color: var(--main-text-color);
+      border: 1px solid var(--main-text-color);
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: all ease 0.3s;
+      letter-spacing: 2px;
+    }
+
+    /* ── CONVERTER ── */
+    .converter-section {
+      width: 100%;
+      max-width: 780px;
+      padding: 0 1.5em 3em;
+      margin: 0 auto;
+    }
+
+    .converter-header {
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 1.1rem;
+      color: var(--main-text-color);
+      text-align: center;
+      margin-bottom: 1.2em;
+      opacity: 0.8;
+      transition: all ease 0.2s;
+    }
+
+    .converter-card {
+      border: 1px solid var(--main-text-color);
+      border-radius: 0.75rem;
+      padding: 1.8em;
+      opacity: 0.9;
+      transition: all ease 0.2s;
+    }
+
+    .conv-input-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .conv-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4em;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .conv-time-field {
+      max-width: 140px;
+      flex: 0 0 140px;
+    }
+
+    .conv-label {
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.65rem;
+      color: var(--main-text-color);
+      opacity: 0.6;
+      transition: all ease 0.2s;
+    }
+
+    .conv-select,
+    .conv-input {
+      font-family: monospace;
+      font-size: 0.85rem;
+      padding: 0.5em 0.75em;
+      background-color: transparent;
+      color: var(--main-text-color);
+      border: 1px solid var(--main-text-color);
+      border-radius: 0.3rem;
+      outline: none;
+      cursor: pointer;
+      transition: all ease 0.2s;
+      width: 100%;
+      opacity: 0.85;
+    }
+
+    .conv-select option {
+      background-color: #1e1f26;
+      color: #ccc;
+    }
+
+    [data-theme="light"] .conv-select option {
+      background-color: #fff;
+      color: #888;
+    }
+
+    .conv-swap-btn {
+      font-size: 1.4rem;
+      background: transparent;
+      border: 1px solid var(--main-text-color);
+      color: var(--main-text-color);
+      border-radius: 0.3rem;
+      padding: 0.4em 0.6em;
+      cursor: pointer;
+      transition: all ease 0.2s;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-bottom: 0;
+      align-self: flex-end;
+    }
+
+    .conv-swap-btn:hover {
+      opacity: 0.7;
+    }
+
+    .conv-result {
+      margin-top: 1.5em;
+      text-align: center;
+      padding: 1em;
+      border-top: 1px solid var(--main-text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3em;
+      transition: all ease 0.2s;
+      opacity: 0.8;
+    }
+
+    .conv-result-time {
+      font-family: monospace;
+      font-size: 2.5rem;
+      color: var(--main-text-color);
+      letter-spacing: 4px;
+      transition: all ease 0.2s;
+    }
+
+    .conv-result-label {
+      font-family: monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--main-text-color);
+      opacity: 0.5;
+      transition: all ease 0.2s;
+    }
+
+    .conv-all-header {
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.65rem;
+      color: var(--main-text-color);
+      opacity: 0.5;
+      text-align: center;
+      margin-top: 1.5em;
+      margin-bottom: 0.8em;
+      transition: all ease 0.2s;
+    }
+
+    .conv-all-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+
+    .conv-all-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15em;
+    }
+
+    .conv-all-flag { font-size: 1.4rem; }
+
+    .conv-all-city {
+      font-family: monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--main-text-color);
+      opacity: 0.55;
+      transition: all ease 0.2s;
+    }
+
+    .conv-all-time {
+      font-family: monospace;
+      font-size: 1.3rem;
+      color: var(--main-text-color);
+      letter-spacing: 2px;
+      transition: all ease 0.2s;
+    }
+
+    .conv-all-tz {
+      font-family: monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--main-text-color);
+      opacity: 0.4;
+      transition: all ease 0.2s;
+    }
+
+    .conv-all-divider {
+      font-size: 1.2rem;
+      color: var(--main-text-color);
+      opacity: 0.3;
+      transition: all ease 0.2s;
+    }
+
+    @media (max-width: 700px) {
+      .clocks-wrapper {
+        flex-direction: column;
+        gap: 2em;
+      }
+
+      .clock {
+        height: 14em;
+        width: 14em;
+      }
+
+      .hour-hand { height: 7.5em; width: 7.5em; }
+      .min-hand  { height: 9em;   width: 9em;   }
+      .sec-hand  { height: 10em;  width: 10em;  }
+    }
+  </style>
 </head>
 <body>
 
-<div class="card">
-    <h1 id="converterTitle">IST ↔ Jakarta Converter</h1>
+<div class="page-header">World Clocks</div>
 
-    <!-- live clocks -->
-    <div class="clocks">
-        <div class="clock" id="jakartaClock">
-            <div class="clock-label">Jakarta (WIB)</div>
-            <div class="clock-time" id="jakartaTime">--:--:--</div>
-        </div>
-        <div class="clock" id="istClock">
-            <div class="clock-label">India Standard Time</div>
-            <div class="clock-time" id="istTime">--:--:--</div>
-        </div>
-        <div class="clock" id="sgtClock">
-            <div class="clock-label">Singapore (SGT)</div>
-            <div class="clock-time" id="sgtTime">--:--:--</div>
-        </div>
+<div class="clocks-wrapper">
+
+  <!-- Jakarta WIB (UTC+7) -->
+  <div class="clock-unit">
+    <div class="clock" id="clock-jkt">
+      <div class="hand hour-hand" id="hour-jkt"></div>
+      <div class="hand min-hand"  id="min-jkt"></div>
+      <div class="hand sec-hand"  id="sec-jkt"></div>
     </div>
+    <div class="clock-label">
+      <span class="city">🇮🇩 Jakarta</span>
+      <span class="tz-tag">WIB — UTC+7</span>
+      <span class="digital-time" id="digital-jkt">--:--:--</span>
+    </div>
+  </div>
 
-    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
-        <select id="fromZone" onchange="updateTitle(); convertTime();">
-            <option value="IST">India Standard Time (IST)</option>
-            <option value="WIB">Jakarta Time (WIB)</option>
-            <option value="SGT">Singapore Time (SGT)</option>
+  <!-- Singapore SGT (UTC+8) -->
+  <div class="clock-unit">
+    <div class="clock" id="clock-sgp">
+      <div class="hand hour-hand" id="hour-sgp"></div>
+      <div class="hand min-hand"  id="min-sgp"></div>
+      <div class="hand sec-hand"  id="sec-sgp"></div>
+    </div>
+    <div class="clock-label">
+      <span class="city">🇸🇬 Singapore</span>
+      <span class="tz-tag">SGT — UTC+8</span>
+      <span class="digital-time" id="digital-sgp">--:--:--</span>
+    </div>
+  </div>
+
+  <!-- India IST (UTC+5:30) -->
+  <div class="clock-unit">
+    <div class="clock" id="clock-ist">
+      <div class="hand hour-hand" id="hour-ist"></div>
+      <div class="hand min-hand"  id="min-ist"></div>
+      <div class="hand sec-hand"  id="sec-ist"></div>
+    </div>
+    <div class="clock-label">
+      <span class="city">🇮🇳 India</span>
+      <span class="tz-tag">IST — UTC+5:30</span>
+      <span class="digital-time" id="digital-ist">--:--:--</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="switch-cont">
+  <button class="switch-btn" id="themeBtn">Light</button>
+</div>
+
+<!-- ── TIMEZONE CONVERTER ── -->
+<div class="converter-section">
+  <div class="converter-header">Time Zone Converter</div>
+
+  <div class="converter-card">
+    <!-- Input row -->
+    <div class="conv-input-row">
+      <div class="conv-field">
+        <label class="conv-label">From</label>
+        <select class="conv-select" id="fromTz">
+          <option value="420">🇮🇩 Jakarta (WIB, UTC+7)</option>
+          <option value="480">🇸🇬 Singapore (SGT, UTC+8)</option>
+          <option value="330">🇮🇳 India (IST, UTC+5:30)</option>
         </select>
-        <select id="toZone" onchange="updateTitle(); convertTime();">
-            <option value="WIB">Jakarta Time (WIB)</option>
-            <option value="IST">India Standard Time (IST)</option>
-            <option value="SGT">Singapore Time (SGT)</option>
+      </div>
+
+      <div class="conv-field conv-time-field">
+        <label class="conv-label">Time</label>
+        <input class="conv-input" type="time" id="inputTime" value="12:00" />
+      </div>
+
+      <button class="conv-swap-btn" id="swapBtn" title="Swap timezones">⇄</button>
+
+      <div class="conv-field">
+        <label class="conv-label">To</label>
+        <select class="conv-select" id="toTz">
+          <option value="480">🇸🇬 Singapore (SGT, UTC+8)</option>
+          <option value="330">🇮🇳 India (IST, UTC+5:30)</option>
+          <option value="420">🇮🇩 Jakarta (WIB, UTC+7)</option>
         </select>
+      </div>
     </div>
 
-    <input type="time" id="timeInput">
-
-    <div class="result" id="result"></div>
-
-    <div class="info">
-        IST (UTC+5:30) | WIB (UTC+7:00) | SGT (UTC+8:00)
+    <!-- Result -->
+    <div class="conv-result" id="convResult">
+      <span class="conv-result-time" id="resultTime">--:-- --</span>
+      <span class="conv-result-label" id="resultLabel"></span>
     </div>
+
+    <!-- All 3 at once -->
+    <div class="conv-all-header">All Timezones at Once</div>
+    <div class="conv-all-row" id="convAllRow">
+      <div class="conv-all-item">
+        <span class="conv-all-flag">🇮🇩</span>
+        <span class="conv-all-city">Jakarta</span>
+        <span class="conv-all-time" id="all-jkt">--:--</span>
+        <span class="conv-all-tz">WIB</span>
+      </div>
+      <div class="conv-all-divider">→</div>
+      <div class="conv-all-item">
+        <span class="conv-all-flag">🇸🇬</span>
+        <span class="conv-all-city">Singapore</span>
+        <span class="conv-all-time" id="all-sgp">--:--</span>
+        <span class="conv-all-tz">SGT</span>
+      </div>
+      <div class="conv-all-divider">→</div>
+      <div class="conv-all-item">
+        <span class="conv-all-flag">🇮🇳</span>
+        <span class="conv-all-city">India</span>
+        <span class="conv-all-time" id="all-ist">--:--</span>
+        <span class="conv-all-tz">IST</span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-const zones = {
-    IST: {label: "India Standard Time (IST)", offset: 5*60+30},
-    WIB: {label: "Jakarta Time (WIB)", offset: 7*60},
-    SGT: {label: "Singapore Time (SGT)", offset: 8*60}
-};
+  const deg = 6;
 
-function convertTime() {
-    const input = document.getElementById("timeInput").value;
-    const from = document.getElementById("fromZone").value;
-    const to = document.getElementById("toZone").value;
-    const resultDiv = document.getElementById("result");
+  // Timezone offsets in minutes from UTC
+  const timezones = [
+    {
+      id: 'jkt',
+      offsetMinutes: 7 * 60,         // WIB UTC+7
+    },
+    {
+      id: 'sgp',
+      offsetMinutes: 8 * 60,         // SGT UTC+8
+    },
+    {
+      id: 'ist',
+      offsetMinutes: 5 * 60 + 30,    // IST UTC+5:30
+    },
+  ];
 
-    if (!input) {
-        resultDiv.innerText = "";
-        return;
-    }
-
-    let [hours, minutes] = input.split(":").map(Number);
-    let total = hours*60 + minutes;
-    const diff = zones[to].offset - zones[from].offset;
-    total = (total + diff + 24*60) % (24*60);
-    const rh = Math.floor(total/60);
-    const rm = total % 60;
-
-    resultDiv.innerText =
-        zones[to].label + ": " +
-        String(rh).padStart(2,"0") + ":" +
-        String(rm).padStart(2,"0");
-}
-
-// live clock updater
-function updateClocks() {
+  function getTimeInOffset(offsetMinutes) {
     const now = new Date();
+    const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+    return new Date(utcMs + offsetMinutes * 60000);
+  }
 
-    // Jakarta is UTC+7
-    const jakarta = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
-    document.getElementById("jakartaTime").innerText = jakarta.toLocaleTimeString("en-US", {hour12: false});
+  function pad(n) {
+    return String(n).padStart(2, '0');
+  }
 
-    // IST is UTC+5:30 (Asia/Kolkata)
-    const ist = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-    document.getElementById("istTime").innerText = ist.toLocaleTimeString("en-US", {hour12: false});
+  function updateClocks() {
+    timezones.forEach(({ id, offsetMinutes }) => {
+      const t = getTimeInOffset(offsetMinutes);
+      const hh = t.getHours();
+      const mm = t.getMinutes();
+      const ss = t.getSeconds();
 
-    // SGT is UTC+8 (Asia/Singapore)
-    const sgt = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Singapore"}));
-    document.getElementById("sgtTime").innerText = sgt.toLocaleTimeString("en-US", {hour12: false});
-}
+      const hourDeg = (hh % 12) * 30 + mm / 2;
+      const minDeg  = mm * deg;
+      const secDeg  = ss * deg;
 
-setInterval(updateClocks, 1000);
-updateClocks();
+      document.getElementById(`hour-${id}`).style.transform = `rotateZ(${hourDeg}deg)`;
+      document.getElementById(`min-${id}`).style.transform  = `rotateZ(${minDeg}deg)`;
+      document.getElementById(`sec-${id}`).style.transform  = `rotateZ(${secDeg}deg)`;
 
-// update header based on dropdown selection
-function updateTitle() {
-    const from = document.getElementById("fromZone").value;
-    const to = document.getElementById("toZone").value;
-    const title = document.getElementById("converterTitle");
-    title.innerText = zones[from].label + " ➜ " + zones[to].label + " Converter";
-}
+      document.getElementById(`digital-${id}`).textContent =
+        `${pad(hh)}:${pad(mm)}:${pad(ss)}`;
+    });
+  }
 
-// initialize title on load
-updateTitle();
+  // ── CONVERTER LOGIC ──
+  const fromTzEl   = document.getElementById('fromTz');
+  const toTzEl     = document.getElementById('toTz');
+  const inputTime  = document.getElementById('inputTime');
+  const resultTime = document.getElementById('resultTime');
+  const resultLabel= document.getElementById('resultLabel');
+  const swapBtn    = document.getElementById('swapBtn');
 
-document.getElementById("timeInput").addEventListener('input', convertTime);
+  const TZ_INFO = {
+    420: { label: 'WIB — UTC+7',    id: 'jkt', name: '🇮🇩 Jakarta' },
+    480: { label: 'SGT — UTC+8',    id: 'sgp', name: '🇸🇬 Singapore' },
+    330: { label: 'IST — UTC+5:30', id: 'ist', name: '🇮🇳 India' },
+  };
+
+  function formatTime24(totalMinutes) {
+    // totalMinutes may be negative or > 1440; normalise
+    totalMinutes = ((totalMinutes % 1440) + 1440) % 1440;
+    const hh = Math.floor(totalMinutes / 60);
+    const mm = totalMinutes % 60;
+    return `${pad(hh)}:${pad(mm)}`;
+  }
+
+  function runConverter() {
+    const [hh, mm] = inputTime.value.split(':').map(Number);
+    const fromOffset = parseInt(fromTzEl.value);
+    const toOffset   = parseInt(toTzEl.value);
+    const inputMinutes = hh * 60 + mm;
+
+    // Convert: subtract source offset, add destination offset
+    const converted = inputMinutes - fromOffset + toOffset;
+    const info = TZ_INFO[toOffset];
+
+    resultTime.textContent  = formatTime24(converted);
+    resultLabel.textContent = info ? info.label + ' · ' + info.name : '';
+
+    // All-three row — base on "from" timezone input
+    const offsets = { jkt: 420, sgp: 480, ist: 330 };
+    Object.entries(offsets).forEach(([id, offset]) => {
+      const mins = inputMinutes - fromOffset + offset;
+      document.getElementById(`all-${id}`).textContent = formatTime24(mins);
+    });
+  }
+
+  fromTzEl.addEventListener('change', runConverter);
+  toTzEl.addEventListener('change', runConverter);
+  inputTime.addEventListener('input', runConverter);
+
+  swapBtn.addEventListener('click', () => {
+    const tmp = fromTzEl.value;
+    fromTzEl.value = toTzEl.value;
+    toTzEl.value = tmp;
+    runConverter();
+  });
+
+  // Init converter with current local time snapped to nearest minute
+  (function initConverterTime() {
+    const now = new Date();
+    inputTime.value = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    runConverter();
+  })();
+
+
+  updateClocks();
+  setInterval(updateClocks, 1000);
+
+  // Theme toggle — start dark
+  document.documentElement.setAttribute('data-theme', 'dark');
+  const themeBtn = document.getElementById('themeBtn');
+
+  themeBtn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    if (current === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      themeBtn.textContent = 'Dark';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeBtn.textContent = 'Light';
+    }
+  });
 </script>
 
 </body>
